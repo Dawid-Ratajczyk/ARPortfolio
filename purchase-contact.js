@@ -123,9 +123,13 @@
   global.closePurchaseContactModal = closePurchaseContactModal;
   global.bindPurchaseButtons = bindPurchaseButtons;
 
-  document.addEventListener("DOMContentLoaded", function () {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function () {
+      bindPurchaseButtons();
+    });
+  } else {
     bindPurchaseButtons();
-  });
+  }
 
   window.addEventListener("portfoliolangchange", syncModalCopy);
-})();
+})(window);
