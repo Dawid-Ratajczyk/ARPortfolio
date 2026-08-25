@@ -54,15 +54,18 @@
       bioBack: "Powrót do portfolio",
       bioContact: "Kontakt",
       footerBio: "Andrzej Ratajczyk, biografia.",
-      metaDescStore:
-        "Andrzej Ratajczyk — druki linorytów. Sklep Shopify: zamówienia i realizacja.",
+      metaDescStore: "Andrzej Ratajczyk — druki linorytów. Zamówienia przez kontakt.",
       titleStore: "Andrzej Ratajczyk — Sklep / druki",
       navStore: "Sklep",
       storeCatalogLink: "Portfolio — grafika",
       storeH1: "Grafiki",
-      storeConfigBanner:
-        "Ustaw w pliku store.html zmienną SHOPIFY_STORE_ORIGIN (np. https://twoja-domena.pl), żeby przyciski prowadziły do produktów.",
       storeBuy: "Kup",
+      purchaseContactLead: "W celu zakupu zapraszam do kontaktu przez:",
+      purchaseContactPhone: "Telefon",
+      purchaseContactEmail: "E-mail",
+      purchaseContactInstagram: "Instagram",
+      purchaseContactClose: "Zamknij",
+      purchaseContactAria: "Informacje o zakupie",
     },
     en: {
       langGroupAria: "Site language",
@@ -112,15 +115,18 @@
       bioBack: "Back to portfolio",
       bioContact: "Contact",
       footerBio: "Andrzej Ratajczyk, biography.",
-      metaDescStore:
-        "Andrzej Ratajczyk — linocut prints. Shopify store: orders and fulfilment.",
+      metaDescStore: "Andrzej Ratajczyk — linocut prints. Orders via contact.",
       titleStore: "Andrzej Ratajczyk — Shop / prints",
       navStore: "Shop",
       storeCatalogLink: "Portfolio — graphics",
       storeH1: "Prints",
-      storeConfigBanner:
-        "Set SHOPIFY_STORE_ORIGIN in store.html (e.g. https://your-domain.com) so buttons link to products.",
       storeBuy: "Buy",
+      purchaseContactLead: "To purchase, please contact me via:",
+      purchaseContactPhone: "Phone",
+      purchaseContactEmail: "E-mail",
+      purchaseContactInstagram: "Instagram",
+      purchaseContactClose: "Close",
+      purchaseContactAria: "Purchase information",
     },
   };
 

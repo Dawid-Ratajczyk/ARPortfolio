@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./purchase-contact.css" />
   <style>
     :root {
       --bg: #0c0c0f;
@@ -674,6 +675,7 @@
 
   <script src="data.js"></script>
   <script src="lang.js"></script>
+  <script src="purchase-contact.js"></script>
   <script>
     /** Gdy portfolio (katalog.html) jest na subdomenie, ustaw pełny URL landingu. Puste = ./index.html */
     const LANDING_PAGE_URL = "";
@@ -685,11 +687,8 @@
     const STORE_PAGE_URL = "";
 
     /**
-     * Ten sam publiczny origin co SHOPIFY_STORE_ORIGIN w store.html — wtedy w powiększeniu grafiki pojawi się „Kup”.
-     * Puste = bez przycisku w lightboxie.
+     * Przycisk „Kup” w lightboxie grafiki otwiera modal kontaktu (purchase-contact.js).
      */
-    const SHOPIFY_STORE_ORIGIN = "https://arlinoryt.myshopify.com/";
-
     /** Gdy brak KONTAKT_PAGE_URL: opcjonalny mailto zamiast ./kontakt.html */
     const CONTACT_EMAIL = "";
 
@@ -815,18 +814,17 @@
         a.textContent = T("cardFooterLink", "Karta pracy");
         workLightboxMeta.appendChild(a);
       }
-      const buyUrl = shopifyProductUrl(w.title);
-      if (buyUrl) {
-        const wrap = document.createElement("div");
-        wrap.className = "work-lightbox__buy-wrap";
-        const buy = document.createElement("a");
-        buy.className = "btn btn--solid work-lightbox__buy";
-        buy.href = buyUrl;
-        buy.target = "_blank";
-        buy.rel = "noopener noreferrer";
-        buy.textContent = T("storeBuy", "Kup");
-        wrap.appendChild(buy);
-        workLightboxMeta.appendChild(wrap);
+      const wrap = document.createElement("div");
+      wrap.className = "work-lightbox__buy-wrap";
+      const buy = document.createElement("button");
+      buy.type = "button";
+      buy.className = "btn btn--solid work-lightbox__buy";
+      buy.setAttribute("data-purchase-contact", "");
+      buy.textContent = T("storeBuy", "Kup");
+      wrap.appendChild(buy);
+      workLightboxMeta.appendChild(wrap);
+      if (typeof window.bindPurchaseButtons === "function") {
+        window.bindPurchaseButtons(wrap);
       }
       workLightbox.hidden = false;
       document.body.classList.add("work-lightbox-open");
@@ -899,25 +897,6 @@
     function isHttpUrl(s) {
       const t = (s || "").trim();
       return /^https?:\/\//i.test(t);
-    }
-
-    function slugTitle(s) {
-      return (
-        (s || "")
-          .toLowerCase()
-          .normalize("NFD")
-          .replace(/\p{M}/gu, "")
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/^-|-$/g, "")
-          .slice(0, 80) || "work"
-      );
-    }
-
-    function shopifyProductUrl(title) {
-      const b = (SHOPIFY_STORE_ORIGIN || "").trim().replace(/\/$/, "");
-      if (!b) return null;
-      const handle = slugTitle(title);
-      return `${b}/products/${encodeURIComponent(handle)}`;
     }
 
     function paintingIsSold(p) {
@@ -1176,6 +1155,9 @@
       renderPaintingsGrid();
       const buyBtn = document.querySelector("#work-lightbox-meta .work-lightbox__buy");
       if (buyBtn) buyBtn.textContent = T("storeBuy", "Kup");
+      if (typeof window.bindPurchaseButtons === "function") {
+        window.bindPurchaseButtons(document.getElementById("work-lightbox-meta"));
+      }
     };
   </script>
 </body>

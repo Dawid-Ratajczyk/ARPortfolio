@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Andrzej Ratajczyk — druki: linoryt. Zamówienia w sklepie Shopify." />
+  <meta name="description" content="Andrzej Ratajczyk — druki linorytów. Zamówienia przez kontakt." />
   <title>Andrzej Ratajczyk — Sklep / druki</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./purchase-contact.css" />
   <style>
     :root {
       --bg: #0c0c0f;
@@ -330,7 +331,6 @@
 
         <div class="store-intro">
           <h1 data-i18n="storeH1">Grafiki</h1>
-          <p id="store-config-banner" class="store-config-banner" data-i18n="storeConfigBanner"></p>
         </div>
       </div>
 
@@ -340,38 +340,8 @@
 
   <script src="data.js"></script>
   <script src="lang.js"></script>
+  <script src="purchase-contact.js"></script>
   <script>
-    /**
-     * Publiczny adres sklepu Shopify (domena główna, bez ścieżki), np.:
-     * "https://twoj-sklep.myshopify.com" lub "https://twoja-domena.pl"
-     * Handle produktu = slug z importu CSV (np. stanczyki → /products/stanczyki).
-     */
-    const SHOPIFY_STORE_ORIGIN = "https://arlinoryt.myshopify.com/";
-
-    function slugTitle(s) {
-      return (
-        s
-          .toLowerCase()
-          .normalize("NFD")
-          .replace(/\p{M}/gu, "")
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/^-|-$/g, "")
-          .slice(0, 80) || "work"
-      );
-    }
-
-    function productUrl(handle) {
-      const b = (SHOPIFY_STORE_ORIGIN || "").trim().replace(/\/$/, "");
-      if (!b) return null;
-      return `${b}/products/${encodeURIComponent(handle)}`;
-    }
-
-    function syncConfigBanner() {
-      const el = document.getElementById("store-config-banner");
-      if (!el) return;
-      el.hidden = !!(SHOPIFY_STORE_ORIGIN || "").trim();
-    }
-
     function buyLabel() {
       if (window.portfolioT) return window.portfolioT("storeBuy");
       return document.documentElement.lang === "en" ? "Buy" : "Kup";
@@ -384,8 +354,6 @@
       grid.innerHTML = "";
 
       works.forEach((w) => {
-        const handle = slugTitle(w.title);
-        const url = productUrl(handle);
         const metaBits = [w.technique, w.size].filter(Boolean);
         const meta = metaBits.join(" · ");
 
@@ -413,19 +381,12 @@
 
         const foot = document.createElement("div");
         foot.className = "card-footer";
-        const a = document.createElement("a");
-        a.className = "btn btn--solid btn--block store-buy";
-        a.textContent = buyLabel();
-        if (url) {
-          a.href = url;
-          a.rel = "noopener noreferrer";
-          a.target = "_blank";
-        } else {
-          a.href = "#";
-          a.classList.add("btn--muted");
-          a.setAttribute("aria-disabled", "true");
-        }
-        foot.appendChild(a);
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "btn btn--solid btn--block store-buy";
+        btn.setAttribute("data-purchase-contact", "");
+        btn.textContent = buyLabel();
+        foot.appendChild(btn);
 
         body.appendChild(h2);
         body.appendChild(metaEl);
@@ -435,15 +396,17 @@
         art.appendChild(body);
         grid.appendChild(art);
       });
+
+      if (typeof window.bindPurchaseButtons === "function") {
+        window.bindPurchaseButtons(grid);
+      }
     }
 
     renderGrid();
-    syncConfigBanner();
 
     window.addEventListener("portfoliolangchange", function () {
-      syncConfigBanner();
-      document.querySelectorAll("a.store-buy").forEach(function (a) {
-        a.textContent = buyLabel();
+      document.querySelectorAll("button.store-buy").forEach(function (btn) {
+        btn.textContent = buyLabel();
       });
     });
   </script>
